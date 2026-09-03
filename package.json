@@ -1,0 +1,26 @@
+{
+  "name": "rn-vite-interview",
+  "private": true,
+  "version": "1.0.0",
+  "description": "前端机试 v20260813 —— RN + Vite 脚手架（react-native-web），实现题目一地址列表与题目二券浮层动效",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.74.5",
+    "react-native-web": "^0.19.13"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.25",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2"
+  }
+}
