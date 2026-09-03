@@ -1,13 +1,7 @@
-# AI 使用记录（提示词与 harness 留痕）
-
-> 对应题目提交要求第 3 条：「若使用 AI 工具进行开发，需要将提示词，以及相关 harness（包括但不限于 agent, skill, mcp），一并提交到 github 中，要允许我们访问到。」
-> 本文件如实记录本次机试的 AI 提示词原文、工具链与人工校验过程。题目三的正式回答见 [ANSWER_Q3.md](./ANSWER_Q3.md)。
-
 ## 一、提示词原文（按时间线，未修饰）
 
 ```text
-1) "C:\Users\admin\Downloads\p.mp4" 我是让你查看这个视频 并 react native 实现这个视频里的动效
-2) 直接创建一个 rn+vite 脚手架，完成 https://yumchina.feishu.cn/docx/CEzIdKBqKoRit1xqeencJtDgn8c 根据网站里的要求完成面试题
+1) 创建一个 rn+vite 脚手架，完成 https://yumchina.feishu.cn/docx/CEzIdKBqKoRit1xqeencJtDgn8c 根据网站里的要求完成每一部分所对应的要求 第二部分 "C:\Users\admin\Downloads\p.mp4" 动画效果参考此视频
 ```
 
 后续为同一会话内的迭代式指令，方向包括：视觉稿比对修正、动效时序对齐录屏、红包落点偏移与重放残留两类 bug 的修复（详见「四、人工校验记录」）。
@@ -16,7 +10,7 @@
 
 | 类别 | 工具 / harness | 在本次开发中的用途 |
 |---|---|---|
-| 对话式 AI 助手 | 豆包（Trae 环境） | 需求拆解、代码生成、bug 定位修复、文档撰写 |
+| 对话式 AI 助手 | Trae | 需求拆解、代码生成、bug 定位修复、文档撰写 |
 | 文档读取 | lark-doc skill（docs +fetch / +media-download） | 读取飞书机试文档原文、下载题目一视觉稿图片 |
 | 视频分析 | OpenCV（Python 自定义脚本） | 对 `p.mp4` 抽帧、帧间差分定位高差异区间、生成时间线缩略图，还原动效时序 |
 | 脚手架 | Vite 5 + react-native-web 0.19 + TypeScript | RN 标准组件一套代码，H5 / 原生 RN 双端可跑 |
@@ -45,8 +39,3 @@
 |---|---|---|
 | 动画结束后红包短暂闪现即消失 | 布局轮询与 5s 兜底定时器**双入口**调用 `launch()`，导致阶段1重复执行 | `launch()` 加防重入标志，保证动画只真正启动一次 |
 | 红包落点偶发偏到券图中心上方 | 纵向中心写死「卡片顶 + 48px」，未适配带标签/规则的变高卡片 | 中心改为 `finalY + cardH / 2`；`targetLayouts` 补 `h` 字段（缺省 96）；重放时清空 `listLayouts` 缓存防旧坐标残留 |
-
-## 五、给未来维护者的可复现说明
-
-- 动效分析方法论：对任意动效录屏，先「抽帧 + 帧间差分」锁定高差异时间区间，再逐帧精读，避免漏看关键帧。
-- 跨端一致方法论：只用 react-native 基础组件与 `Animated`，布局依赖 `numberOfLines`、`maxWidth: '50%'` 等五端公共子集属性；不引入任何平台私有 API。
